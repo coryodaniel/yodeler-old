@@ -1,0 +1,7 @@
+en:
+  yodeler:
+    event_types:
+      doorbell:
+        name: Doorbell
+        description: Someone rang the door bell
+        message: Someone rang the doorbell %{number_of_presses} times.
