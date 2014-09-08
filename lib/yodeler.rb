@@ -35,7 +35,6 @@ module Yodeler
   #   you could also create your own class inheriting #{Yodeler::EventType::Base}
   def self.register(event_type,&block)
     event_type_klass = Yodeler.define_event_type(event_type)
-    event_type_klass.configuration = Yodeler::EventType::Configuration.new
     
     if block_given?
       yield event_type_klass.configuration
@@ -90,7 +89,6 @@ module Yodeler
       # Define an ancestor event type of Yodeler::EventType::Base and
       #   add AS Configurable to it
       new_event_type_class = Class.new(Yodeler::EventType::Base) do
-        cattr_accessor :configuration
       end
 
       # Define the event type class, e.g.: Yodeler::EventType::UserViewedEventType

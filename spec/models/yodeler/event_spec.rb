@@ -3,12 +3,10 @@ require 'spec_helper'
 describe Yodeler::Event do
   subject{ FactoryGirl.build :event }
   it { should validate_presence_of :event_type }
-  it { should have_many(:subscriptions).dependent(:destroy) }
-  it { should have_many(:notifications).through(:subscriptions) }
+  it { should have_many(:notifications) }
   it { should belong_to(:event_type) }
-  pending { should have_many(:subscribers).through(:subscriptions) }      
   it { should serialize(:payload) }
-  
+  it { should delegate_method(:subscriptions).to(:event_type)}
   
   describe '#duration' do
     context 'when benchmark times are present' do

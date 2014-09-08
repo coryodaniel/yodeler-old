@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :event, class: Yodeler::Event do
-    association :event_type, factory: :doorbell_event_type
+    event_type
     
     payload({
       number_of_presses: 9,
@@ -15,16 +15,25 @@ FactoryGirl.define do
   end
 
   factory :subscription, class: Yodeler::Subscription do
-    association :event, factory: :event
+    event_type
     subscriber{ FactoryGirl.create :user }
   end
 
   factory :notification, class: Yodeler::Notification do
-    association :subscription, factory: :subscription
+    after(:build) do |notification|
+      notification.subscription ||= FactoryGirl.create :subscription
+      notification.event ||= FactoryGirl.create :event, event_type: notification.subscription.event_type
+    end
   end
 
   factory :doorbell_event_type, class: Yodeler::EventType::DoorbellEventType do
     name :doorbell
+  end
+
+  factory :event_type, class: Yodeler::EventType::Base do
+    name {
+      "random_#{rand(1000000000000)}"
+    }
   end
 
   factory :base_event_type, class: Yodeler::EventType::Base do

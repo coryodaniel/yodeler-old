@@ -14,7 +14,7 @@ class CreateYodelerTables < ActiveRecord::Migration
     end
 
     create_table :yodeler_subscriptions do |t|
-      t.integer :yodeler_event_id, null: false
+      t.integer :yodeler_event_type_id, null: false
       
       # polymorphic, support for whatever type of class is owning the subscription
       t.string :subscriber_type, null: false
@@ -25,6 +25,7 @@ class CreateYodelerTables < ActiveRecord::Migration
     end
 
     create_table :yodeler_notifications do |t|
+      t.integer :yodeler_event_id, null: false
       t.integer :yodeler_subscription_id, null: false
       t.integer :state
       t.datetime :created_at, null: false
@@ -33,9 +34,13 @@ class CreateYodelerTables < ActiveRecord::Migration
 
     # sqlite3 has an index name length limitation of 62(?!) characters
     unless Rails.env.test?
+      add_index :yodeler_event_types, :name
+
       add_index :yodeler_events, :yodeler_event_type_id
-      add_index :yodeler_subscriptions, :yodeler_event_id
+
+      add_index :yodeler_subscriptions, :yodeler_event_type_id
       add_index :yodeler_subscriptions, [:subscriber_id, :subscriber_type]
+
       add_index :yodeler_notifications, :yodeler_event_id
       add_index :yodeler_notifications, :yodeler_subscription_id
       add_index :yodeler_notifications, :state

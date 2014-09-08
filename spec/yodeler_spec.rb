@@ -72,9 +72,14 @@ describe Yodeler do
       }
       
       context 'when a payload is present' do
-        it{
+        context 'when its the first dispatch' do
+          pending 'creates an event type record'
+        end
+        pending 'it creates an event with the payload'
+
+        #it{
           #Yodeler.dispatch :doorbell, {number_of_presses: 3}
-        }
+        #}
       end
       
       pending 'when a payload is not present'

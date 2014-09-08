@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Yodeler::Notification do
-  subject{ FactoryGirl.build :notification }
+  let(:event){
+    FactoryGirl.create(:event, event_type: FactoryGirl.create(:doorbell_event_type))
+  }
+  subject{ 
+    FactoryGirl.create :notification, event: event 
+  }
   it { should validate_presence_of :subscription }
   it { should belong_to(:subscription) }
-  it { should delegate_method(:event).to(:subscription) }  
+  it { should validate_presence_of :event }
+  it { should belong_to(:event) }  
+  it { should delegate_method(:event_type).to(:event) }  
   it { should delegate_method(:subscriber).to(:subscription) }  
 
   describe '#message' do
@@ -13,7 +20,6 @@ describe Yodeler::Notification do
     end
     it 'is the event name downcased and underscored' do
       expect(subject.send(:event_type_key)).to eq :doorbell
-
     end
   end
 
@@ -27,22 +33,11 @@ describe Yodeler::Notification do
     subject{ FactoryGirl.create :notification }
     
     it{
-      expect(subject.event_type).to eq Yodeler::EventType::DoorbellEventType.first
-    }
-
-    it{
+      expect(subject.event_type.name).to eq Yodeler::EventType::DoorbellEventType.first.name
+      expect(subject.event_type.name).to eq subject.event.event_type.name
       expect(subject.subscriber).to eq User.first
-    }
-
-    it{
       expect(subject.subscription).to eq Yodeler::Event.first.subscriptions.first
-    }
-
-    it{
       expect(subject).to eq Yodeler::Event.first.notifications.first
-    }
-
-    it{
       expect(subject.event).to eq Yodeler::Event.first
     }    
   end
