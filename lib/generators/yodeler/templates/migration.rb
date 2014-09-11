@@ -2,6 +2,7 @@ class CreateYodelerTables < ActiveRecord::Migration
   def change
     create_table :yodeler_event_types do |t|
       t.string :name, null: false # Maps to registered name in DSL
+      t.string :type #STI
       t.datetime :created_at
     end
 

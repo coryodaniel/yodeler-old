@@ -1,7 +1,7 @@
 require 'spec_helper' 
 
 describe Yodeler::EventType::Base do
-  subject{ FactoryGirl.build :base_event_type }
+  subject{ FactoryGirl.build :event_type }
   it{ should validate_presence_of :name }
   it{ should have_many(:events).dependent(:destroy) }
   it{ should have_many(:subscriptions).dependent(:destroy) }
@@ -16,4 +16,11 @@ describe Yodeler::EventType::Base do
   describe '.table_name' do
     it{ expect(Yodeler::EventType::Base.table_name).to eq 'yodeler_event_types' }
   end  
+
+
+  describe '.yodel!' do
+    context 'when there are subscriptions' do
+      pending 'dispatch subscription'
+    end
+  end
 end

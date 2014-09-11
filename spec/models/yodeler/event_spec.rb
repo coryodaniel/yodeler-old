@@ -7,6 +7,7 @@ describe Yodeler::Event do
   it { should belong_to(:event_type) }
   it { should serialize(:payload) }
   it { should delegate_method(:subscriptions).to(:event_type)}
+  it { should delegate_method(:name).to(:event_type)}
   
   describe '#duration' do
     context 'when benchmark times are present' do

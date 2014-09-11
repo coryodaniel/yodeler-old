@@ -5,12 +5,9 @@ module Yodeler
 
       class Configuration
         include ActiveSupport::Configurable
-        config_accessor(:states) { 
-          {
-            unread: 0,
-            read:   1
-          }
-        }
+        config_accessor(:states) do
+          { unread: 0, read: 1 }
+        end
       end
 
       def self.configuration
@@ -31,13 +28,24 @@ module Yodeler
         foreign_key: :yodeler_event_type_id
 
 
-      def self.yodel!(event_type, payload)
-        event_type = self.first_or_initialize(name: event_type)
+      # Logs the occurrence of a {Yodeler::Event} and dispatches notifications
+      #
+      # @param [Hash] params additional params to log
+      # @option params [String] :started_at Benchmark started at time
+      # @option params [String] :finished_at Benchmark finished at time
+      #
+      # @param [Hash] payload Serialized hash, anything you want
+      #
+      # @return [~Yodeler::EventType::Base] the logged event
+      def self.yodel!(params)
+        current_event_type  = self.first
+        current_event       = current_event_type.events.create(params)
 
-        event_type.events.create(payload: payload)
-        new_klass.subscriptions.each do |subscriber|
-          # notify the subscriber... subscriber
+        current_event_type.subscriptions.each do |subscriber|
+
         end
+
+        current_event
       end
       
     end

@@ -1,7 +1,7 @@
 require "yodeler/engine"
 
 module Yodeler
-  autoload :Configuration,        'yodeler/configuration'
+  autoload :Configuration,    'yodeler/configuration'
   autoload :EventType,        'yodeler/models/event_type'
   autoload :Event,            'yodeler/models/event'
   autoload :Subscription,     'yodeler/models/subscription'
@@ -10,7 +10,7 @@ module Yodeler
   autoload :EventType,        'yodeler/models/event_type'
 
   mattr_accessor :registrations
-  self.registrations = []
+  self.registrations = {}
 
   # Configuring the yodeler gem
   def self.configuration
@@ -40,34 +40,51 @@ module Yodeler
       yield event_type_klass.configuration
     end
 
-    Yodeler.registrations << event_type    
+    # Add the event type to the yodeler_event_types table
+    event_type_klass.first_or_create name: event_type
+
+    # keep track of the registrations
+    Yodeler.registrations[event_type] = event_type_klass
+    event_type_klass
   end  
 
+  # Dispatches an event
+  # @param [Symbol] event_type the registered event type
+  # @param [Hash] payload a hash of values to serialize with the event
+  #
   def self.dispatch(event_type, payload={})
-    event_type_klass = Yodeler.get_class(event_type) rescue Yodeler::EventType::Noop
+    event_type_klass = Yodeler.registrations[event_type] 
 
-    event_type_klass.yodel! payload
+    # If the class wasn't registered dispatch the default class noop
+    if event_type_klass.nil?
+      # Register it the first time
+      Yodeler.register(:noop) if Yodeler.registrations[:noop].nil?
+        
+      event_type_klass = Yodeler::EventType::NoopEventType
+    end
+
+    started_at = nil
+    finished_at = nil
+
+    if block_given?
+      started_at  = Time.now  
+      yield payload 
+      finished_at = Time.now
+    end
+
+    event_type_klass.yodel!({
+      started_at: started_at, 
+      finished_at: finished_at,
+      payload: payload
+    })
   end
-
-  def self.get_class(event_type) 
-    klass_name = Yodeler.event_type_class_name(event_type)
-    "Yodeler::EventType::#{klass_name}".constantize
-  end
-
-  # # all event types defunct or not
-  # def self.event_types
-  # end
-
-  # # all registered event types
-  # def self.registered_event_types
-  # end
 
   # Clears all the registrations and removes the EventType classes
   def self.flush_registrations!
-    Yodeler.registrations.each do |event_type|
+    Yodeler.registrations.keys.each do |event_type|
       Yodeler.undefine_event_type(event_type)
     end
-    Yodeler.registrations = []
+    Yodeler.registrations = {}
   end
 
   private
@@ -76,7 +93,8 @@ module Yodeler
     end
 
     def self.undefine_event_type(event_type)
-      if defined?( Yodeler.get_class(event_type) ) == 'constant'
+      event_klass = Yodeler.registrations[event_type]
+      if event_klass && ( defined?( event_klass ) == 'constant' )
         Yodeler::EventType.instance_eval{
           remove_const( event_type.to_s.classify.to_sym )
         }

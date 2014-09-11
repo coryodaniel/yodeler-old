@@ -30,11 +30,24 @@ describe Yodeler::Notification do
   end  
 
   describe 'relationships' do
-    subject{ FactoryGirl.create :notification }
+    let(:event){
+      FactoryGirl.create :event, 
+        event_type: FactoryGirl.create(:doorbell_event_type)
+    }
+
+    let(:subscription){
+      FactoryGirl.create :subscription, 
+        subscriber: FactoryGirl.create(:user), 
+        event_type: event.event_type
+    }
+
+    subject{ 
+      FactoryGirl.create :notification, event: event, subscription: subscription
+    }
     
     it{
-      expect(subject.event_type.name).to eq Yodeler::EventType::DoorbellEventType.first.name
-      expect(subject.event_type.name).to eq subject.event.event_type.name
+      expect(subject.event_type.name.to_s).to eq Yodeler::EventType::DoorbellEventType.first.name.to_s
+      expect(subject.event_type.name.to_s).to eq subject.event.event_type.name.to_s
       expect(subject.subscriber).to eq User.first
       expect(subject.subscription).to eq Yodeler::Event.first.subscriptions.first
       expect(subject).to eq Yodeler::Event.first.notifications.first

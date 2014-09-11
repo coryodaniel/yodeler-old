@@ -27,20 +27,14 @@ FactoryGirl.define do
   end
 
   factory :doorbell_event_type, class: Yodeler::EventType::DoorbellEventType do
+    type "Yodeler::EventType::DoorbellEventType"
     name :doorbell
   end
 
   factory :event_type, class: Yodeler::EventType::Base do
+    type "Yodeler::EventType::Base"
     name {
       "random_#{rand(1000000000000)}"
     }
-  end
-
-  factory :base_event_type, class: Yodeler::EventType::Base do
-    name :base
-  end
-
-  factory :noop_event_type, class: Yodeler::EventType::Noop do
-    name :noop
   end
 end

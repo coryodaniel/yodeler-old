@@ -12,6 +12,6 @@ describe Yodeler::Subscription do
     it{ expect(Yodeler::Subscription.table_name).to eq 'yodeler_subscriptions' }
   end
 
-  describe 'callbacks' do
-  end  
+  pending 'callbacks'
+  pending 'thresholding'
 end

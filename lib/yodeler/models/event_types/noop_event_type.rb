@@ -6,7 +6,7 @@ module Yodeler
     # @example
     #   Yodeler.dispatch :i_dont_exist, my_payload
     #     # => Yodeler.dispatch :noop, my_payload
-    class Noop < Yodeler::EventType::Base
+    class NoopEventType < Yodeler::EventType::Base
     end
   end
 end
