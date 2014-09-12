@@ -6,7 +6,7 @@ module Yodeler
   autoload :Event,            'yodeler/models/event'
   autoload :Subscription,     'yodeler/models/subscription'
   autoload :Notification,     'yodeler/models/notification'
-  autoload :ListensToYodler,  'yodeler/listens_to_yodler'
+  autoload :ListensToYodeler,  'yodeler/listens_to_yodeler'
   autoload :EventType,        'yodeler/models/event_type'
 
   mattr_accessor :registrations
