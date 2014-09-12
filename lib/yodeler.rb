@@ -42,9 +42,6 @@ module Yodeler
       yield event_type_klass.configuration
     end
 
-    # Add the event type to the yodeler_event_types table
-    event_type_klass.first_or_create name: event_type
-
     # keep track of the registrations
     Yodeler.registrations[event_type] = event_type_klass
     event_type_klass

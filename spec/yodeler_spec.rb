@@ -2,11 +2,6 @@ require 'spec_helper'
 
 describe Yodeler do
   describe '.register' do
-    it 'creates an event type record' do
-      expect{
-        Yodeler.register :doorbell
-      }.to change(Yodeler::EventType::Base, :count).by(1)
-    end
 
     context 'when a block is provided' do
       before do
@@ -68,6 +63,13 @@ describe Yodeler do
   end
 
   describe '.dispatch' do
+    it 'creates an event type record' do
+      Yodeler.register :doorbell
+      expect{
+        Yodeler.dispatch :doorbell
+      }.to change(Yodeler::EventType::Base, :count).by(1)
+    end
+
     context 'when the event type is registered' do      
       context 'when a payload is present' do
         before{

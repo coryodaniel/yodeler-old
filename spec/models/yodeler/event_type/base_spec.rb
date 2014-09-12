@@ -23,8 +23,12 @@ describe Yodeler::EventType::Base do
         Yodeler.register :subscribed_to_event_test
       }
 
+      let(:event_type){
+        Yodeler.dispatch :subscribed_to_event_test
+      }
+
       let(:subscription){
-        FactoryGirl.create :subscription, event_type: event_type_klass.first
+        FactoryGirl.create :subscription, yodeler_event_type_id: event_type.id
       }
       
 

@@ -38,7 +38,10 @@ module Yodeler
       #
       # @return [~Yodeler::EventType::Base] the logged event
       def self.yodel!(params)
-        current_event_type  = self.first
+        # Add the event type to the yodeler_event_types table
+        current_event_type = self.first_or_create name: Yodeler.registrations.key(self)
+
+        #current_event_type  = self.first
         current_event       = current_event_type.events.create(params)
 
         current_event_type.subscriptions.each do |subscriber|
