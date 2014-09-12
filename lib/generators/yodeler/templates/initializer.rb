@@ -1,3 +1,7 @@
 Yodeler.configure do |config|
-  #config.noop_event_type.all_the_settings_that_are_normally_exposed_via_dsl
+  # Override the default states
+  # config.default_states = {
+  #   unread:  0,
+  #   read:    1
+  # }
 end

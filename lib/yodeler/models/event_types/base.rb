@@ -6,7 +6,7 @@ module Yodeler
       class Configuration
         include ActiveSupport::Configurable
         config_accessor(:states) do
-          { unread: 0, read: 1 }
+          Yodeler.configuration.default_states
         end
       end
 
@@ -42,12 +42,13 @@ module Yodeler
         current_event       = current_event_type.events.create(params)
 
         current_event_type.subscriptions.each do |subscriber|
-
+          subscriber.notifications.create({
+            yodeler_event_id: current_event.id
+          })
         end
 
         current_event
       end
-      
     end
   end
 end
