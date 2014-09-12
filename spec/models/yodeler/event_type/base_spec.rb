@@ -28,10 +28,15 @@ describe Yodeler::EventType::Base do
       }
       
 
-      it 'dispatch notification' do
+      it 'dispatches a notification' do
         expect{
           Yodeler.dispatch(subscription.event_type.name.to_sym)
         }.to change(Yodeler::Notification, :count).by(1)
+      end
+
+      it 'sets the notifications state' do
+        Yodeler.dispatch(subscription.event_type.name.to_sym)
+        expect( Yodeler::Notification.first.state ).to eq :unread
       end
     end
   end

@@ -43,7 +43,9 @@ module Yodeler
 
         current_event_type.subscriptions.each do |subscriber|
           subscriber.notifications.create({
-            yodeler_event_id: current_event.id
+            yodeler_event_id: current_event.id,
+            # get the integer out of the default state (first state)
+            state: self.configuration.states.first.last
           })
         end
 
