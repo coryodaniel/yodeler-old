@@ -5,6 +5,10 @@ describe Yodeler::ListensToYodeler do
     it 'uses subscriptions as the Yodeler::Subscription assocation name' do
       expect(User.new).to have_many(:subscriptions).dependent(:destroy)
     end
+
+    it 'uses notifications as the Yodeler::Notification assocation name' do
+      expect(User.new).to have_many(:notifications).through(:subscriptions)
+    end    
   end
 
   context 'when not setting the relationship name' do
