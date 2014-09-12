@@ -1,4 +1,6 @@
+# encoding: utf-8
 require "yodeler/engine"
+require "yodeler/listens_to_yodeler"
 
 module Yodeler
   autoload :Configuration,    'yodeler/configuration'
@@ -120,3 +122,4 @@ module Yodeler
   #   end
   # end
 end
+
