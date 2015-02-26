@@ -1,7 +1,7 @@
 class CreateYodelerTables < ActiveRecord::Migration
   def change
     create_table :yodeler_event_types do |t|
-      t.string :name, null: false, unique: true # Maps to registered name in DSL
+      t.string :name, null: false # Maps to registered name in DSL
       t.string :type #STI
       t.datetime :created_at
     end
@@ -35,7 +35,7 @@ class CreateYodelerTables < ActiveRecord::Migration
 
     # sqlite3 has an index name length limitation of 62(?!) characters
     unless Rails.env.test?
-      add_index :yodeler_event_types, :name
+      add_index :yodeler_event_types, :name, unique: true      
 
       add_index :yodeler_events, :yodeler_event_type_id
 
