@@ -59,8 +59,11 @@ describe Yodeler do
       # pending 'accepting and applying email' 
       # pending 'accepting and applying websocket' 
     end
-
   end
+  # only dispatches if block returns falsey
+  pending '.dispatch_unless'
+  # only dispatches if block returns truthy
+  pending '.dispatch_if'
 
   describe '.dispatch' do
     it 'creates an event type record' do

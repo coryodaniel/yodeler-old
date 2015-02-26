@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Yodeler::EventType::Base do
   subject{ FactoryGirl.build :event_type }
   it{ should validate_presence_of :name }
-  it{ should have_many(:events).dependent(:destroy) }
-  it{ should have_many(:subscriptions).dependent(:destroy) }
+  it{ should have_many(:events).dependent(:delete_all) }
+  it{ should have_many(:subscriptions).dependent(:delete_all) }
 
   context 'when inherited' do
     subject{ FactoryGirl.build :doorbell_event_type }

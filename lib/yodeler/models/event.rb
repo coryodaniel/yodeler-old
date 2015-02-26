@@ -11,7 +11,7 @@ module Yodeler
     delegate :name, to: :event_type
 
     def duration
-      finished_at - started_at if finished_at.present? and started_at.present?
+      finished_at - started_at if finished_at.present? && started_at.present?
     end
   end
 end

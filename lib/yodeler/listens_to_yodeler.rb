@@ -13,7 +13,7 @@ module Yodeler
         self.yodeler_notifications_name = notifications_association_name
 
         has_many self.yodeler_subscriptions_name,
-          dependent: :destroy,
+          dependent: :delete_all,
           class_name: "Yodeler::Subscription",
           foreign_key: :subscriber_id
 

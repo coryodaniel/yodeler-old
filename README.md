@@ -100,3 +100,7 @@ Getting around the objects
 @subscription.event
 
 ```
+
+TODO
+=======
+* Pluggable back-end, redis, obvi

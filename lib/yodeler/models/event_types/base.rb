@@ -18,12 +18,12 @@ module Yodeler
       validates_uniqueness_of :name
       
       has_many :events, 
-        dependent: :destroy, 
+        dependent: :delete_all, 
         class_name: "Yodeler::Event", 
         foreign_key: :yodeler_event_type_id
 
       has_many :subscriptions, 
-        dependent: :destroy, 
+        dependent: :delete_all, 
         class_name: "Yodeler::Subscription", 
         foreign_key: :yodeler_event_type_id
 
